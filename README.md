@@ -1,49 +1,26 @@
 CswAPIClient
 ===========
 
-C# API for communicating with CswAPIClient.no through the CSW Service
+C# API for communicating with an OGC CSW Service
 
 
 Getting Started
 ===============
 
-To install CswAPIClient, run the following command in the Package Manager Console:
+To install CswApiClient, run the following command in the Package Manager Console:
 
-    PM> Install-Package CswAPIClient
+    PM> Install-Package CswApiClient
     
 
 Example code
 ============
-    
-    using www.opengis.net;
-    using CswAPIClient;
-    
-    public class MyClass {
-        public void MyMethod() {
-            CswAPIClient api = new CswAPIClient();
-            SearchResultsType result = api.Search("flomsone");
-            Console.WriteLine(result.numberOfRecordsMatched + " metadata found");
-        }
-    }
 
+...
 
 Security
 ========
 
-From version: 2.1.1 (07.04.2014)
-
-The API is using SSL to communicate with www.CswAPIClient.no. Use your credentials like this to perform Insert/update/delete operations: 
-
-    CswAPIClient.CswAPIClient api = new CswAPIClient.CswAPIClient("myusername", "mypassword");
-    
-    MD_Metadata_Type metadata = new MD_Metadata_Type();
-    // ... add information to the metadata object
-    var transaction = _CswAPIClient.MetadataInsert(metadata);
-    Console.WriteLine(transaction.TotalInserted + " metadata inserted.");
-
-
-Credentials can be acquired from your [Geodatakoordinator](http://norgedigitalt.no/Norge_digitalt/Norsk/Om_oss/Organisering_nasjonalt/Nasjonal_geodatakoordinator/) at [Kartverket](http://www.kartverket.no).
-
+...
 
 SimpleMetadata
 ==============
@@ -52,16 +29,15 @@ The **MD_Metadata_Type** is quite large and complex since it is based on the ISO
 
 Example of use of **SimpleMetadata**
 
-    using CswAPIClient;
-    
-    CswAPIClient api = new CswAPIClient("myusername", "mypassword");
-    
 	SimpleMetadata simpleMetadata = SimpleMetadata.CreateDataset();
 	simpleMetadata.Title = "This is my dataset!";
 	simpleMetadata.Abstract = "This is the abstract telling you everything you need to know about this dataset.";
 	simpleMetadata.ContactPublisher = new SimpleContact
 	{ 
-	    Name = "John Smith", Email = "nothing@example.com", Organization = "My organization", Role = "publisher" 
+	    Name = "John Smith",
+      Email = "nothing@example.com",
+      Organization = "My organization",
+      Role = "publisher" 
 	};
 
 
@@ -113,10 +89,9 @@ Example of use of **SimpleMetadata**
     </gmd:MD_Metadata>
 
 
-The **MD_Metadata_Type** can be inserted into CswAPIClient by using the API like this:
+The **MD_Metadata_Type** can be inserted into CswApi by using the API like this:
 
-    var transaction = _CswAPIClient.MetadataInsert(simpleMetadata.GetMetadata());
+    var transaction = _cswApi.MetadataInsert(simpleMetadata.GetMetadata());
     
 
 The **SimpleMetadata** wrapper has methods for all fields that is required to be compliant with [INSPIRE](http://inspire.ec.europa.eu/).
-
