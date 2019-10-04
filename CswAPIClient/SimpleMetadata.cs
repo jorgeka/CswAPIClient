@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using www.opengis.net;
 
 namespace CswApiClient
@@ -40,8 +39,9 @@ namespace CswApiClient
         /// Construct simple metadata object based on the opengis metadata.
         /// </summary>
         /// <param name="md">The original metadata object</param>
-        public SimpleMetadata(MD_Metadata_Type md) {
-            if (md == null) 
+        public SimpleMetadata(MD_Metadata_Type md)
+        {
+            if (md == null)
                 throw new ArgumentNullException("md", "Metadata cannot be null.");
             _md = md;
         }
@@ -49,17 +49,17 @@ namespace CswApiClient
         public static SimpleMetadata CreateService()
         {
             SimpleMetadata metadata = CreateSimpleMetadata("service", new SV_ServiceIdentification_Type());
-            metadata.GetServiceIdentification().couplingType = new SV_CouplingType_PropertyType 
-            { 
-                SV_CouplingType = new CodeListValue_Type 
-                { 
+            metadata.GetServiceIdentification().couplingType = new SV_CouplingType_PropertyType
+            {
+                SV_CouplingType = new CodeListValue_Type
+                {
                     codeList = "",
                     codeListValue = "tight"
-                } 
+                }
             };
             metadata.GetServiceIdentification().serviceType = new GenericName_PropertyType { Item = new CodeType { Value = "view" } };
-            metadata.GetServiceIdentification().containsOperations = new SV_OperationMetadata_PropertyType[] 
-            { 
+            metadata.GetServiceIdentification().containsOperations = new SV_OperationMetadata_PropertyType[]
+            {
                 new SV_OperationMetadata_PropertyType()
             };
             return metadata;
@@ -82,12 +82,14 @@ namespace CswApiClient
                 {
                     new MD_Identification_PropertyType {
                         AbstractMD_Identification = identification
-                    }                    
+                    }
                 }
             };
-            SimpleMetadata simpleMetadata = new SimpleMetadata(md);
-            simpleMetadata.HierarchyLevel = hierarchyLevel;
-            return simpleMetadata;
+
+            return new SimpleMetadata(md)
+            {
+                HierarchyLevel = hierarchyLevel
+            };
         }
 
         public MD_Metadata_Type GetMetadata()
@@ -99,37 +101,37 @@ namespace CswApiClient
         {
             try
             {
-                if(_md.identificationInfo != null && _md.identificationInfo.Length > 0
-                    && _md.identificationInfo[0].AbstractMD_Identification != null 
+                if (_md.identificationInfo?.Length > 0
+                    && _md.identificationInfo[0].AbstractMD_Identification != null
                     && _md.identificationInfo[0].AbstractMD_Identification.citation != null
                     && _md.identificationInfo[0].AbstractMD_Identification.citation.CI_Citation != null
                     && _md.identificationInfo[0].AbstractMD_Identification.citation.CI_Citation.citedResponsibleParty != null)
-                        _md.identificationInfo[0].AbstractMD_Identification.citation.CI_Citation.citedResponsibleParty = null;
+                    _md.identificationInfo[0].AbstractMD_Identification.citation.CI_Citation.citedResponsibleParty = null;
             }
-            catch (Exception ex) { }
+            catch (Exception) { }
 
             try
             {
-                if (_md.identificationInfo != null && _md.identificationInfo.Length > 0
+                if (_md.identificationInfo?.Length > 0
                     && _md.identificationInfo[0].AbstractMD_Identification != null
                     && _md.identificationInfo[0].AbstractMD_Identification.citation != null
                     && _md.identificationInfo[0].AbstractMD_Identification.citation.CI_Citation != null
                     && _md.identificationInfo[0].AbstractMD_Identification.citation.CI_Citation.edition != null)
-                        _md.identificationInfo[0].AbstractMD_Identification.citation.CI_Citation.edition = null;
+                    _md.identificationInfo[0].AbstractMD_Identification.citation.CI_Citation.edition = null;
             }
-            catch (Exception ex) { }
+            catch (Exception) { }
 
             try
             {
-                if (_md.identificationInfo != null && _md.identificationInfo.Length > 0
+                if (_md.identificationInfo?.Length > 0
                     && _md.identificationInfo[0].AbstractMD_Identification != null
                     && _md.identificationInfo[0].AbstractMD_Identification.citation != null
                     && _md.identificationInfo[0].AbstractMD_Identification.citation.CI_Citation != null
                     && _md.identificationInfo[0].AbstractMD_Identification.citation.CI_Citation.presentationForm != null)
-                        _md.identificationInfo[0].AbstractMD_Identification.citation.CI_Citation.presentationForm = null;
+                    _md.identificationInfo[0].AbstractMD_Identification.citation.CI_Citation.presentationForm = null;
             }
-            catch (Exception ex) { }
-            
+            catch (Exception) { }
+
         }
 
         public string Title
@@ -141,10 +143,11 @@ namespace CswApiClient
                 if (titleElement != null)
                 {
                     title = titleElement.CharacterString;
-                } 
+                }
                 return title;
             }
-            set {
+            set
+            {
                 PT_FreeText_PropertyType titleElementWithFreeText = GetTitleElement() as PT_FreeText_PropertyType;
                 if (titleElementWithFreeText != null)
                 {
@@ -154,7 +157,7 @@ namespace CswApiClient
                 {
                     SetTitleElement(new CharacterString_PropertyType { CharacterString = value });
                 }
-                
+
             }
         }
 
@@ -176,7 +179,7 @@ namespace CswApiClient
         private void SetTitleElement(CharacterString_PropertyType element)
         {
             var identification = GetIdentificationNotNull();
-            
+
             if (identification.citation == null)
             {
                 identification.citation = new CI_Citation_PropertyType();
@@ -217,11 +220,11 @@ namespace CswApiClient
             return value;
         }
 
-        public string EnglishTitle 
+        public string EnglishTitle
         {
             get
             {
-                return GetEnglishValueFromFreeText(GetTitleElement());                
+                return GetEnglishValueFromFreeText(GetTitleElement());
             }
 
             set
@@ -237,12 +240,14 @@ namespace CswApiClient
             }
         }
 
-        private PT_FreeText_PropertyType CreateFreeTextElement(string characterString, string englishLocalizedValue) {
-            return new PT_FreeText_PropertyType { 
-                    CharacterString = characterString,
-                    PT_FreeText = new PT_FreeText_Type
-                    {
-                        textGroup = new LocalisedCharacterString_PropertyType[] { 
+        private PT_FreeText_PropertyType CreateFreeTextElement(string characterString, string englishLocalizedValue)
+        {
+            return new PT_FreeText_PropertyType
+            {
+                CharacterString = characterString,
+                PT_FreeText = new PT_FreeText_Type
+                {
+                    textGroup = new LocalisedCharacterString_PropertyType[] {
                             new LocalisedCharacterString_PropertyType {
                                 LocalisedCharacterString = new LocalisedCharacterString_Type {
                                      locale = LOCALE_LINK_ENG,
@@ -250,13 +255,13 @@ namespace CswApiClient
                                 }
                             }
                         }
-                    }
-                };
+                }
+            };
         }
 
         private AbstractMD_Identification_Type GetIdentification()
         {
-            AbstractMD_Identification_Type identification = null; 
+            AbstractMD_Identification_Type identification = null;
             if (_md.identificationInfo != null && _md.identificationInfo.Count() > 0 && _md.identificationInfo[0].AbstractMD_Identification != null)
                 identification = _md.identificationInfo[0].AbstractMD_Identification;
             return identification;
@@ -328,9 +333,9 @@ namespace CswApiClient
 
             set
             {
-                _md.hierarchyLevel = new MD_ScopeCode_PropertyType[] { 
-                    new MD_ScopeCode_PropertyType { 
-                        MD_ScopeCode = new CodeListValue_Type { 
+                _md.hierarchyLevel = new MD_ScopeCode_PropertyType[] {
+                    new MD_ScopeCode_PropertyType {
+                        MD_ScopeCode = new CodeListValue_Type {
                             codeList = "http://www.isotc211.org/2005/resources/Codelist/ML_gmxCodelists.xml#MD_ScopeCode",
                             codeListValue = value
                         }
@@ -341,7 +346,7 @@ namespace CswApiClient
 
         public string Abstract
         {
-            get 
+            get
             {
                 string @abstract = null;
                 CharacterString_PropertyType abstractElement = GetAbstractElement();
@@ -394,8 +399,9 @@ namespace CswApiClient
             return @abstract;
         }
 
-        public string Purpose {
-            get 
+        public string Purpose
+        {
+            get
             {
                 string purpose = null;
                 var identification = GetIdentification();
@@ -451,7 +457,8 @@ namespace CswApiClient
             {
                 string desc = null;
                 var datasetIdentification = GetDatasetIdentification();
-                if (datasetIdentification != null && datasetIdentification.supplementalInformation != null) {
+                if (datasetIdentification != null && datasetIdentification.supplementalInformation != null)
+                {
                     desc = datasetIdentification.supplementalInformation.CharacterString;
                 }
                 return desc;
@@ -516,7 +523,7 @@ namespace CswApiClient
                 _md.contact = new CI_ResponsibleParty_PropertyType[]
                 {
                     new CI_ResponsibleParty_PropertyType {
-                        CI_ResponsibleParty = responsibleParty    
+                        CI_ResponsibleParty = responsibleParty
                     }
                 };
             }
@@ -546,11 +553,11 @@ namespace CswApiClient
             if (responsibleParty == null)
             {
                 responsibleParty = new CI_ResponsibleParty_Type();
-                
+
                 var newPointOfContactArray = new CI_ResponsibleParty_PropertyType[] {
                         new CI_ResponsibleParty_PropertyType {
                             CI_ResponsibleParty = responsibleParty
-                        }                        
+                        }
                     };
 
                 var identification = GetIdentificationNotNull();
@@ -567,7 +574,7 @@ namespace CswApiClient
             PopuplateResponsiblePartyFromSimpleContact(responsibleParty, contact);
         }
 
-        private CI_ResponsibleParty_Type GetContactInformationResponsiblePartyWithRole(string roleCodeValue) 
+        private CI_ResponsibleParty_Type GetContactInformationResponsiblePartyWithRole(string roleCodeValue)
         {
             CI_ResponsibleParty_Type contact = null;
             var identification = GetIdentification();
@@ -620,7 +627,7 @@ namespace CswApiClient
             {
                 responsibleParty.organisationName = new CharacterString_PropertyType { CharacterString = contact.Organization };
             }
-            
+
             if (responsibleParty.contactInfo == null)
             {
                 responsibleParty.contactInfo = new CI_Contact_PropertyType
@@ -656,7 +663,7 @@ namespace CswApiClient
                 responsibleParty.contactInfo.CI_Contact.address.CI_Address = new CI_Address_Type();
             }
 
-            responsibleParty.contactInfo.CI_Contact.address.CI_Address.electronicMailAddress = new CharacterString_PropertyType[] { 
+            responsibleParty.contactInfo.CI_Contact.address.CI_Address.electronicMailAddress = new CharacterString_PropertyType[] {
                     new CharacterString_PropertyType { CharacterString = contact.Email }
                 };
 
@@ -674,7 +681,7 @@ namespace CswApiClient
         private SimpleContact ParseResponsiblePartyToSimpleContact(CI_ResponsibleParty_Type responsibleParty)
         {
             string email = null;
-            if (responsibleParty.contactInfo != null && responsibleParty.contactInfo.CI_Contact != null && responsibleParty.contactInfo.CI_Contact.address != null 
+            if (responsibleParty.contactInfo != null && responsibleParty.contactInfo.CI_Contact != null && responsibleParty.contactInfo.CI_Contact.address != null
                 && responsibleParty.contactInfo.CI_Contact.address.CI_Address != null
                 && responsibleParty.contactInfo.CI_Contact.address.CI_Address.electronicMailAddress != null
                 && responsibleParty.contactInfo.CI_Contact.address.CI_Address.electronicMailAddress[0] != null
@@ -729,8 +736,8 @@ namespace CswApiClient
                     languageValue = "English";
                 }
 
-                GetDatasetIdentification().language = 
-                    new LanguageCode_PropertyType[] 
+                GetDatasetIdentification().language =
+                    new LanguageCode_PropertyType[]
                     {
                         new LanguageCode_PropertyType
                         {
@@ -771,7 +778,7 @@ namespace CswApiClient
                                 else
                                     thesaurus = GetStringOrNull(new CharacterString_PropertyType { CharacterString = titleCharacterString.CharacterString });
                             }
-                            
+
                             foreach (var keywordElement in descriptiveKeyword.MD_Keywords.keyword)
                             {
                                 string keywordValue = GetStringOrNull(keywordElement);
@@ -801,7 +808,7 @@ namespace CswApiClient
                 if (identification != null)
                 {
                     List<MD_Keywords_PropertyType> allKeywords = new List<MD_Keywords_PropertyType>();
-                    
+
                     Dictionary<string, bool> processed = new Dictionary<string, bool>();
                     foreach (var simpleKeyword in value)
                     {
@@ -822,16 +829,17 @@ namespace CswApiClient
                                     }
                                     else
                                     {
-                                        if(!string.IsNullOrEmpty(fk.KeywordLink))
-                                            keywordsToAdd.Add(new MD_Keyword { keyword = new Anchor_Type {  Value = fk.Keyword, href = fk.KeywordLink } });
+                                        if (!string.IsNullOrEmpty(fk.KeywordLink))
+                                            keywordsToAdd.Add(new MD_Keyword { keyword = new Anchor_Type { Value = fk.Keyword, href = fk.KeywordLink } });
                                         else
                                             keywordsToAdd.Add(new MD_Keyword { keyword = new CharacterString_PropertyType { CharacterString = fk.Keyword } });
-                                    }                                    
+                                    }
                                 }
                             }
 
-                            CI_Citation_PropertyType thesaurus = null; 
-                            if (!string.IsNullOrWhiteSpace(simpleKeyword.Thesaurus)) {
+                            CI_Citation_PropertyType thesaurus = null;
+                            if (!string.IsNullOrWhiteSpace(simpleKeyword.Thesaurus))
+                            {
 
                                 object title = toCharString(simpleKeyword.Thesaurus);
                                 string date = "";
@@ -878,22 +886,24 @@ namespace CswApiClient
                                 if (simpleKeyword.Thesaurus.Equals(SimpleKeyword.THESAURUS_INSPIRE_PRIORITY_DATASET))
                                     dateType = "publication";
 
-                                    thesaurus = new CI_Citation_PropertyType { 
-                                    CI_Citation = new CI_Citation_Type { 
+                                thesaurus = new CI_Citation_PropertyType
+                                {
+                                    CI_Citation = new CI_Citation_Type
+                                    {
                                         title = new CI_Citation_Title { item = title },
                                         date = new CI_Date_PropertyType[] {
                                             new CI_Date_PropertyType {
                                                 CI_Date = new CI_Date_Type {
                                                     date = new Date_PropertyType { Item = date },
-                                                    dateType = new CI_DateTypeCode_PropertyType { 
+                                                    dateType = new CI_DateTypeCode_PropertyType {
                                                         CI_DateTypeCode = new CodeListValue_Type {
                                                             codeList = "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#CI_DateTypeCode",
                                                             codeListValue = dateType
                                                         }
-                                                    }                                
+                                                    }
                                                 }
                                             }
-                                            
+
                                         }
                                     }
                                 };
@@ -917,7 +927,7 @@ namespace CswApiClient
                                 MD_Keywords = new MD_Keywords_Type
                                 {
                                     thesaurusName = thesaurus,
-                                    type = keywordType,                                    
+                                    type = keywordType,
                                     keyword = keywordsToAdd.ToArray()
                                 }
                             });
@@ -1018,7 +1028,8 @@ namespace CswApiClient
         // dataset
         public string TopicCategory
         {
-            get {
+            get
+            {
                 string topicCategory = null;
                 var identification = GetDatasetIdentification();
                 if (identification != null && identification.topicCategory != null && identification.topicCategory.Length > 0
@@ -1033,7 +1044,8 @@ namespace CswApiClient
 
                 return topicCategory;
             }
-            set {
+            set
+            {
                 var identification = GetDatasetIdentification();
                 if (identification != null)
                 {
@@ -1042,16 +1054,17 @@ namespace CswApiClient
                         {
                             MD_TopicCategoryCode = (MD_TopicCategoryCode_Type)Enum.Parse(typeof(MD_TopicCategoryCode_Type), value, true)
                         }
-                    };                        
+                    };
                 }
             }
         }
 
         public List<SimpleThumbnail> Thumbnails
         {
-            get {
+            get
+            {
                 List<SimpleThumbnail> thumbnails = new List<SimpleThumbnail>();
-                
+
                 var identification = GetIdentification();
                 if (identification != null && identification.graphicOverview != null && identification.graphicOverview.Length > 0
                     && identification.graphicOverview[0] != null)
@@ -1070,13 +1083,16 @@ namespace CswApiClient
                 }
                 return thumbnails;
             }
-            set {
-                if (value != null) {
+            set
+            {
+                if (value != null)
+                {
                     var identification = GetIdentification();
                     if (identification != null)
                     {
                         List<MD_BrowseGraphic_PropertyType> graphics = new List<MD_BrowseGraphic_PropertyType>();
-                        foreach(SimpleThumbnail thumbnail in value) {
+                        foreach (SimpleThumbnail thumbnail in value)
+                        {
                             MD_BrowseGraphic_PropertyType graphic = new MD_BrowseGraphic_PropertyType
                             {
                                 MD_BrowseGraphic = new MD_BrowseGraphic_Type
@@ -1126,10 +1142,12 @@ namespace CswApiClient
 
         public string ProductSpecificationUrl
         {
-            get {
+            get
+            {
                 return GetMetadataExtensionInfoURLWithApplicationProfile(APPLICATION_PROFILE_PRODUCTSPEC);
             }
-            set {
+            set
+            {
                 CI_OnlineResource_Type onlineResource = GetMetadataExtensionInfoWithApplicationProfile(APPLICATION_PROFILE_PRODUCTSPEC);
                 if (onlineResource == null)
                 {
@@ -1232,7 +1250,7 @@ namespace CswApiClient
             if (titleObject != null)
                 return titleObject.Value;
             else if (citation != null)
-            {              
+            {
                 CharacterString_PropertyType title = citation.item as CharacterString_PropertyType;
                 return title.CharacterString;
             }
@@ -1258,13 +1276,13 @@ namespace CswApiClient
 
                 if (string.IsNullOrEmpty(value.Name) || string.IsNullOrEmpty(value.URL))
                 {
-                    if (onlineResource != null) 
+                    if (onlineResource != null)
                     {
                         RemoveOnlineResourceMetadataExtensionInfoWithApplicationProfile(APPLICATION_PROFILE_PRODUCTSPEC_OTHER);
                     }
                 }
 
-                else 
+                else
                 {
 
                     if (onlineResource == null)
@@ -1276,7 +1294,7 @@ namespace CswApiClient
                     onlineResource.applicationProfile = new CharacterString_PropertyType { CharacterString = APPLICATION_PROFILE_PRODUCTSPEC_OTHER };
                     onlineResource.name = new CharacterString_PropertyType { CharacterString = value.Name };
                     onlineResource.protocol = new CharacterString_PropertyType { CharacterString = RESOURCE_PROTOCOL_WWW };
-                
+
                 }
             }
         }
@@ -1306,7 +1324,7 @@ namespace CswApiClient
             MD_MetadataExtensionInformation_PropertyType[] newExtensionInfo = new MD_MetadataExtensionInformation_PropertyType[] {
                     extensionInfo
                 };
-                
+
             if (_md.metadataExtensionInfo == null)
             {
                 _md.metadataExtensionInfo = newExtensionInfo;
@@ -1338,7 +1356,7 @@ namespace CswApiClient
 
                     counter++;
                 }
-            }          
+            }
         }
 
 
@@ -1475,7 +1493,7 @@ namespace CswApiClient
             {
                 string value = null;
                 var datasetIdentification = GetDatasetIdentification();
-                if (datasetIdentification != null && datasetIdentification.spatialRepresentationType != null 
+                if (datasetIdentification != null && datasetIdentification.spatialRepresentationType != null
                     && datasetIdentification.spatialRepresentationType.Length > 0)
                 {
                     MD_SpatialRepresentationTypeCode_PropertyType spatialRepType = datasetIdentification.spatialRepresentationType[0];
@@ -1509,7 +1527,7 @@ namespace CswApiClient
             get
             {
                 SimpleDistributionFormat format = null;
-                if (_md.distributionInfo != null && _md.distributionInfo.MD_Distribution != null 
+                if (_md.distributionInfo != null && _md.distributionInfo.MD_Distribution != null
                     && _md.distributionInfo.MD_Distribution.distributionFormat != null
                     && _md.distributionInfo.MD_Distribution.distributionFormat.Length > 0
                     && _md.distributionInfo.MD_Distribution.distributionFormat[0] != null
@@ -1518,7 +1536,8 @@ namespace CswApiClient
                     && _md.distributionInfo.MD_Distribution.distributionFormat[0].MD_Format.name != null)
                 {
                     var df = _md.distributionInfo.MD_Distribution.distributionFormat[0].MD_Format;
-                    format = new SimpleDistributionFormat {
+                    format = new SimpleDistributionFormat
+                    {
                         Name = df.name.CharacterString,
                         Version = df.version != null ? df.version.CharacterString : null
                     };
@@ -1557,18 +1576,18 @@ namespace CswApiClient
             get
             {
                 List<SimpleDistributionFormat> formats = null;
-                
+
                 if (_md.distributionInfo != null && _md.distributionInfo.MD_Distribution != null
                     && _md.distributionInfo.MD_Distribution.distributionFormat != null
-                    && _md.distributionInfo.MD_Distribution.distributionFormat.Length > 0 )
+                    && _md.distributionInfo.MD_Distribution.distributionFormat.Length > 0)
                 {
                     formats = new List<SimpleDistributionFormat>();
 
-                    foreach (var mdFormat in _md.distributionInfo.MD_Distribution.distributionFormat) 
+                    foreach (var mdFormat in _md.distributionInfo.MD_Distribution.distributionFormat)
                     {
                         SimpleDistributionFormat format = null;
 
-                        if (mdFormat.MD_Format != null && mdFormat.MD_Format.name != null) 
+                        if (mdFormat.MD_Format != null && mdFormat.MD_Format.name != null)
                         {
                             var df = mdFormat.MD_Format;
                             format = new SimpleDistributionFormat
@@ -1581,7 +1600,7 @@ namespace CswApiClient
                         }
                     }
                 }
-                
+
                 return formats;
             }
 
@@ -1598,23 +1617,23 @@ namespace CswApiClient
                 }
 
                 List<MD_Format_PropertyType> dsFormats = new List<MD_Format_PropertyType>();
-                
-                
+
+
                 foreach (var dsFormat in value)
+                {
+                    MD_Format_PropertyType mdFormatPropertyType = new MD_Format_PropertyType
                     {
-                     MD_Format_PropertyType mdFormatPropertyType = new MD_Format_PropertyType
+                        MD_Format = new MD_Format_Type
                         {
-                            MD_Format = new MD_Format_Type
-                            {
-                                name = toCharString(dsFormat.Name),
-                                version = toCharString(dsFormat.Version)
-                            }
-                        };
-                     dsFormats.Add(mdFormatPropertyType);
-                    }
-                
-            _md.distributionInfo.MD_Distribution.distributionFormat = dsFormats.ToArray();
-                
+                            name = toCharString(dsFormat.Name),
+                            version = toCharString(dsFormat.Version)
+                        }
+                    };
+                    dsFormats.Add(mdFormatPropertyType);
+                }
+
+                _md.distributionInfo.MD_Distribution.distributionFormat = dsFormats.ToArray();
+
             }
         }
 
@@ -1627,7 +1646,7 @@ namespace CswApiClient
                 SimpleReferenceSystem value = null;
 
                 if (_md.referenceSystemInfo != null && _md.referenceSystemInfo.Length > 0 && _md.referenceSystemInfo[0] != null
-                    && _md.referenceSystemInfo[0].MD_ReferenceSystem != null 
+                    && _md.referenceSystemInfo[0].MD_ReferenceSystem != null
                     && _md.referenceSystemInfo[0].MD_ReferenceSystem.referenceSystemIdentifier != null
                     && _md.referenceSystemInfo[0].MD_ReferenceSystem.referenceSystemIdentifier.RS_Identifier != null
                     && _md.referenceSystemInfo[0].MD_ReferenceSystem.referenceSystemIdentifier.RS_Identifier.code != null
@@ -1650,7 +1669,7 @@ namespace CswApiClient
                     new MD_ReferenceSystem_PropertyType {
                         MD_ReferenceSystem = new MD_ReferenceSystem_Type {
                             referenceSystemIdentifier = new RS_Identifier_PropertyType {
-                                 RS_Identifier = new RS_Identifier_Type { 
+                                 RS_Identifier = new RS_Identifier_Type {
                                      code = toCharString(value.CoordinateSystem),
                                      codeSpace = toCharString(value.Namespace)
                                  }
@@ -1672,23 +1691,23 @@ namespace CswApiClient
                 {
                     referenceSystems = new List<SimpleReferenceSystem>();
 
-                    for (int r = 0; r < _md.referenceSystemInfo.Length; r++ )
+                    for (int r = 0; r < _md.referenceSystemInfo.Length; r++)
                     {
-                        if( _md.referenceSystemInfo[r].MD_ReferenceSystem != null 
+                        if (_md.referenceSystemInfo[r].MD_ReferenceSystem != null
                             && _md.referenceSystemInfo[r].MD_ReferenceSystem.referenceSystemIdentifier != null
                             && _md.referenceSystemInfo[r].MD_ReferenceSystem.referenceSystemIdentifier.RS_Identifier != null
                             && _md.referenceSystemInfo[r].MD_ReferenceSystem.referenceSystemIdentifier.RS_Identifier.code != null
-                            && _md.referenceSystemInfo[r].MD_ReferenceSystem.referenceSystemIdentifier.RS_Identifier.codeSpace != null) 
+                            && _md.referenceSystemInfo[r].MD_ReferenceSystem.referenceSystemIdentifier.RS_Identifier.codeSpace != null)
+                        {
+                            RS_Identifier_Type identifier = _md.referenceSystemInfo[r].MD_ReferenceSystem.referenceSystemIdentifier.RS_Identifier;
+                            SimpleReferenceSystem referenceSystem = new SimpleReferenceSystem
                             {
-                                RS_Identifier_Type identifier = _md.referenceSystemInfo[r].MD_ReferenceSystem.referenceSystemIdentifier.RS_Identifier;
-                                SimpleReferenceSystem referenceSystem = new SimpleReferenceSystem
-                                {
-                                    CoordinateSystem = identifier.code.CharacterString,
-                                    Namespace = identifier.codeSpace.CharacterString
-                                };
+                                CoordinateSystem = identifier.code.CharacterString,
+                                Namespace = identifier.codeSpace.CharacterString
+                            };
 
-                                referenceSystems.Add(referenceSystem);
-                            }         
+                            referenceSystems.Add(referenceSystem);
+                        }
                     }
 
                 }
@@ -1701,14 +1720,14 @@ namespace CswApiClient
 
                 foreach (var refSystem in value)
                 {
-                   MD_ReferenceSystem_PropertyType refSystemProperty = new MD_ReferenceSystem_PropertyType 
+                    MD_ReferenceSystem_PropertyType refSystemProperty = new MD_ReferenceSystem_PropertyType
                     {
-                        MD_ReferenceSystem = new MD_ReferenceSystem_Type 
+                        MD_ReferenceSystem = new MD_ReferenceSystem_Type
                         {
-                            referenceSystemIdentifier = new RS_Identifier_PropertyType 
+                            referenceSystemIdentifier = new RS_Identifier_PropertyType
                             {
-                                RS_Identifier = new RS_Identifier_Type 
-                                { 
+                                RS_Identifier = new RS_Identifier_Type
+                                {
                                     code = toCharString(refSystem.CoordinateSystem),
                                     codeSpace = toCharString(refSystem.Namespace)
                                 }
@@ -1716,7 +1735,7 @@ namespace CswApiClient
                         }
                     };
 
-                  refSystems.Add(refSystemProperty);
+                    refSystems.Add(refSystemProperty);
                 }
                 _md.referenceSystemInfo = refSystems.ToArray();
             }
@@ -1738,7 +1757,7 @@ namespace CswApiClient
                 {
                     RS_Identifier_Type identifier = _md.identificationInfo[0].AbstractMD_Identification.citation.CI_Citation.identifier[0].MD_Identifier as RS_Identifier_Type;
 
-                    if (identifier != null) 
+                    if (identifier != null)
                     {
                         value = new SimpleResourceReference
                         {
@@ -1764,7 +1783,7 @@ namespace CswApiClient
                         _md.identificationInfo[0].AbstractMD_Identification.citation.CI_Citation.identifier = new MD_Identifier_PropertyType[]
                             {
                                 new MD_Identifier_PropertyType()
-                               
+
                             };
                     }
 
@@ -1774,10 +1793,10 @@ namespace CswApiClient
                     }
 
                     _md.identificationInfo[0].AbstractMD_Identification.citation.CI_Citation.identifier[0].MD_Identifier = new RS_Identifier_Type
-                                    {
-                                        code = value.Code != null ? toCharString(value.Code) : null,
-                                        codeSpace = value.Codespace != null ? toCharString(value.Codespace) : null
-                                    };
+                    {
+                        code = value.Code != null ? toCharString(value.Code) : null,
+                        codeSpace = value.Codespace != null ? toCharString(value.Codespace) : null
+                    };
 
                 }
             }
@@ -1803,7 +1822,7 @@ namespace CswApiClient
                     var resource = _md.distributionInfo.MD_Distribution.transferOptions[0].MD_DigitalTransferOptions.onLine[0].CI_OnlineResource;
                     var tranferOptions = _md.distributionInfo.MD_Distribution.transferOptions[0].MD_DigitalTransferOptions;
                     var englishUnitsOfDistribution = tranferOptions.unitsOfDistribution as PT_FreeText_PropertyType;
-            
+
                     value = new SimpleDistributionDetails
                     {
                         URL = resource.linkage != null ? resource.linkage.URL : null,
@@ -1840,7 +1859,7 @@ namespace CswApiClient
 
                 PT_FreeText_PropertyType UnitsOfDistribution = null;
                 if (!string.IsNullOrWhiteSpace(value.UnitsOfDistribution))
-                    UnitsOfDistribution = CreateFreeTextElement( value.UnitsOfDistribution, value.EnglishUnitsOfDistribution);
+                    UnitsOfDistribution = CreateFreeTextElement(value.UnitsOfDistribution, value.EnglishUnitsOfDistribution);
 
                 CI_OnlineResource_Type.Description_Type descriptionOption = null;
                 CI_OnLineFunctionCode_PropertyType functionOption = null;
@@ -1853,7 +1872,7 @@ namespace CswApiClient
 
                 _md.distributionInfo.MD_Distribution.transferOptions = new MD_DigitalTransferOptions_PropertyType[] {
                     new MD_DigitalTransferOptions_PropertyType {
-                        MD_DigitalTransferOptions = new MD_DigitalTransferOptions_Type { 
+                        MD_DigitalTransferOptions = new MD_DigitalTransferOptions_Type {
                             unitsOfDistribution = UnitsOfDistribution ,
                             onLine = new CI_OnlineResource_PropertyType[] {
                                 new CI_OnlineResource_PropertyType {
@@ -1909,7 +1928,7 @@ namespace CswApiClient
                             {
                                 MD_RepresentativeFraction = new MD_RepresentativeFraction_Type
                                 {
-                                    denominator = string.IsNullOrWhiteSpace(value) ?  new Integer_PropertyType { Integer = null } : new Integer_PropertyType { Integer = value }
+                                    denominator = string.IsNullOrWhiteSpace(value) ? new Integer_PropertyType { Integer = null } : new Integer_PropertyType { Integer = value }
                                 }
                             }
                         }
@@ -1925,7 +1944,7 @@ namespace CswApiClient
         /// </summary>
         public string MaintenanceFrequency
         {
-            get 
+            get
             {
                 string value = null;
                 var identification = GetIdentification();
@@ -1987,7 +2006,7 @@ namespace CswApiClient
             set
             {
                 var identification = GetIdentificationNotNull();
-                identification.status = new MD_ProgressCode_PropertyType[] { 
+                identification.status = new MD_ProgressCode_PropertyType[] {
                     new MD_ProgressCode_PropertyType {
                         MD_ProgressCode = new CodeListValue_Type {
                             codeList = "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_ProgressCode",
@@ -2003,7 +2022,7 @@ namespace CswApiClient
             get
             {
                 SimpleQualitySpecification value = null;
-                
+
                 if (_md.dataQualityInfo != null
                     && _md.dataQualityInfo.Length > 0
                     && _md.dataQualityInfo[0] != null
@@ -2022,39 +2041,44 @@ namespace CswApiClient
                         && domainConsistency.result[0].AbstractDQ_Result != null)
                     {
                         DQ_ConformanceResult_Type result = domainConsistency.result[0].AbstractDQ_Result as DQ_ConformanceResult_Type;
-                        if (result != null) {
+                        if (result != null)
+                        {
                             value = new SimpleQualitySpecification();
 
                             if (result.specification != null
-                            && result.specification.CI_Citation != null) {
+                            && result.specification.CI_Citation != null)
+                            {
 
 
                                 // title
-                                if (result.specification.CI_Citation.title.item != null) {
+                                if (result.specification.CI_Citation.title.item != null)
+                                {
                                     value.Title = GetStringFromObject(result.specification.CI_Citation.title.item);
                                 }
 
 
                                 // date and datetype
                                 if (result.specification.CI_Citation.date != null
-                                    && result.specification.CI_Citation.date.Length > 0 
+                                    && result.specification.CI_Citation.date.Length > 0
                                     && result.specification.CI_Citation.date[0] != null
-                                    && result.specification.CI_Citation.date[0].CI_Date != null) {
+                                    && result.specification.CI_Citation.date[0].CI_Date != null)
+                                {
 
-                                        CI_Date_Type dateType = result.specification.CI_Citation.date[0].CI_Date;
+                                    CI_Date_Type dateType = result.specification.CI_Citation.date[0].CI_Date;
 
-                                        if (dateType.date != null && dateType.date.Item != null)
+                                    if (dateType.date != null && dateType.date.Item != null)
+                                    {
+                                        string date = dateType.date.Item as string;
+                                        if (date != null)
                                         {
-                                            string date = dateType.date.Item as string;
-                                            if (date != null)
-                                            {
-                                                value.Date = date;
-                                            }
+                                            value.Date = date;
                                         }
+                                    }
 
-                                        if (dateType.dateType != null && dateType.dateType.CI_DateTypeCode != null) {
-                                            value.DateType = dateType.dateType.CI_DateTypeCode.codeListValue;
-                                        }
+                                    if (dateType.dateType != null && dateType.dateType.CI_DateTypeCode != null)
+                                    {
+                                        value.DateType = dateType.dateType.CI_DateTypeCode.codeListValue;
+                                    }
                                 }
 
                                 // explanation
@@ -2071,7 +2095,7 @@ namespace CswApiClient
                                 {
                                     value.Result = result.pass.Boolean;
                                 }
-                            }                         
+                            }
                         }
                     }
                 }
@@ -2093,18 +2117,18 @@ namespace CswApiClient
                                                     new CI_Date_PropertyType {
                                                         CI_Date = new CI_Date_Type {
                                                             date = new Date_PropertyType {
-                                                                Item = value.Date  
+                                                                Item = value.Date
                                                             },
                                                             dateType = new CI_DateTypeCode_PropertyType {
                                                                 CI_DateTypeCode = new CodeListValue_Type {
                                                                     codeList = "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#CI_DateTypeCode",
                                                                     codeListValue = value.DateType
-                                                                }    
+                                                                }
                                                             }
                                                         }
                                                     }
                                                 }
-                                            }    
+                                            }
                                         },
                                         explanation = CreateFreeTextElement(value.Explanation, value.EnglishExplanation),
                                         pass = value.Result != null
@@ -2124,11 +2148,11 @@ namespace CswApiClient
                         new DQ_DataQuality_PropertyType {
                             DQ_DataQuality = new DQ_DataQuality_Type {
                                 scope = new DQ_Scope_PropertyType
-                                { 
+                                {
                                     DQ_Scope = new DQ_Scope_Type
-                                    { 
+                                    {
                                         level = new MD_ScopeCode_PropertyType
-                                        { 
+                                        {
                                             MD_ScopeCode = new CodeListValue_Type
                                             {
                                                 codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_ScopeCode",
@@ -2268,7 +2292,7 @@ namespace CswApiClient
                                 }
                             }
                             else
-                            { 
+                            {
                                 DQ_ConceptualConsistency_Type conceptualConsistency = _md.dataQualityInfo[0].DQ_DataQuality.report[r].AbstractDQ_Element as DQ_ConceptualConsistency_Type;
                                 if (conceptualConsistency != null
                                     && conceptualConsistency.result != null
@@ -2277,7 +2301,7 @@ namespace CswApiClient
                                     && conceptualConsistency.result[0].AbstractDQ_Result != null)
                                 {
                                     DQ_QuantitativeResult_Type resultQuantitative = conceptualConsistency.result[0].AbstractDQ_Result as DQ_QuantitativeResult_Type;
-                                    if(resultQuantitative != null)
+                                    if (resultQuantitative != null)
                                     {
                                         SimpleQualitySpecification resultItem = new SimpleQualitySpecification();
                                         resultItem.Title = conceptualConsistency.nameOfMeasure?[0]?.type?.Value;
@@ -2326,17 +2350,17 @@ namespace CswApiClient
                         };
                     }
 
-                    DQ_Result_PropertyType   DQResult = new DQ_Result_PropertyType
+                    DQ_Result_PropertyType DQResult = new DQ_Result_PropertyType
+                    {
+                        AbstractDQ_Result = new DQ_ConformanceResult_Type
                         {
-                            AbstractDQ_Result = new DQ_ConformanceResult_Type
+                            specification = new CI_Citation_PropertyType
                             {
-                                specification = new CI_Citation_PropertyType
+                                href = specificationLink,
+                                CI_Citation = new CI_Citation_Type
                                 {
-                                    href = specificationLink,
-                                    CI_Citation = new CI_Citation_Type
-                                    {
-                                        title = new CI_Citation_Title { item = title },
-                                        date = new CI_Date_PropertyType[] {
+                                    title = new CI_Citation_Title { item = title },
+                                    date = new CI_Date_PropertyType[] {
                                                 new CI_Date_PropertyType {
                                                     CI_Date = new CI_Date_Type {
                                                         date = new Date_PropertyType {
@@ -2351,7 +2375,7 @@ namespace CswApiClient
                                                     }
                                                 }
                                             },
-                                        identifier = new MD_Identifier_PropertyType[]
+                                    identifier = new MD_Identifier_PropertyType[]
                                         {
                                              new MD_Identifier_PropertyType
                                              {
@@ -2368,34 +2392,34 @@ namespace CswApiClient
                                                 }
                                               }
                                             }
-                                    }
-                                },
-                                explanation = CreateFreeTextElement(mdResult.Explanation, mdResult.EnglishExplanation),
-                                pass = mdResult.Result != null 
-                                ? new Boolean_PropertyType { Boolean = mdResult.Result.Value } 
+                                }
+                            },
+                            explanation = CreateFreeTextElement(mdResult.Explanation, mdResult.EnglishExplanation),
+                            pass = mdResult.Result != null
+                                ? new Boolean_PropertyType { Boolean = mdResult.Result.Value }
                                 : new Boolean_PropertyType { nilReason = "unknown" }
-                            }
-                        };
-
-                        mdResults.Add(DQResult);
-                        resultCounter++;
-
-                        if (resultCounter == numberOfResultsForEachReport)
-                        {
-                            reports.Add(
-                                new DQ_Element_PropertyType
-                                {
-                                    AbstractDQ_Element = new DQ_DomainConsistency_Type
-                                    {
-                                        result = new DQ_Result_PropertyType[] { }
-                                    }
-                                });
-
-                            reports[reportCounter].AbstractDQ_Element.result = mdResults.ToArray();
-                            mdResults = new List<DQ_Result_PropertyType>();
-                            resultCounter = 0;
-                            reportCounter++;
                         }
+                    };
+
+                    mdResults.Add(DQResult);
+                    resultCounter++;
+
+                    if (resultCounter == numberOfResultsForEachReport)
+                    {
+                        reports.Add(
+                            new DQ_Element_PropertyType
+                            {
+                                AbstractDQ_Element = new DQ_DomainConsistency_Type
+                                {
+                                    result = new DQ_Result_PropertyType[] { }
+                                }
+                            });
+
+                        reports[reportCounter].AbstractDQ_Element.result = mdResults.ToArray();
+                        mdResults = new List<DQ_Result_PropertyType>();
+                        resultCounter = 0;
+                        reportCounter++;
+                    }
                 }
 
                 if (mdResults.Count > 0)
@@ -2415,7 +2439,8 @@ namespace CswApiClient
                 var conceptualConsistencyResult = value.Where(r => r.Responsible == "sds-performance"
                             || r.Responsible == "sds-availability" || r.Responsible == "sds-capacity").ToList();
 
-                foreach(var conceptualConsistency in conceptualConsistencyResult) { 
+                foreach (var conceptualConsistency in conceptualConsistencyResult)
+                {
 
                     if (conceptualConsistency.Responsible.ToLower() == "sds-performance")
                     {
@@ -2445,7 +2470,7 @@ namespace CswApiClient
                                             {
                                                 new Record_PropertyType
                                                 {
-                                                    Record = Convert.ToDouble(conceptualConsistency.QuantitativeResult) 
+                                                    Record = Convert.ToDouble(conceptualConsistency.QuantitativeResult)
                                                 }
                                             }
                                         }
@@ -2545,11 +2570,11 @@ namespace CswApiClient
                         new DQ_DataQuality_PropertyType {
                             DQ_DataQuality = new DQ_DataQuality_Type {
                                 scope = new DQ_Scope_PropertyType
-                                { 
+                                {
                                     DQ_Scope = new DQ_Scope_Type
-                                    { 
+                                    {
                                         level = new MD_ScopeCode_PropertyType
-                                        { 
+                                        {
                                             MD_ScopeCode = new CodeListValue_Type
                                             {
                                                 codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/ML_gmxCodelists.xml#MD_ScopeCode",
@@ -2584,13 +2609,13 @@ namespace CswApiClient
                 return value;
         }
 
-        public string ProcessHistory 
+        public string ProcessHistory
         {
             get
             {
                 string value = null;
-                if (_md.dataQualityInfo != null 
-                    && _md.dataQualityInfo.Length > 0 
+                if (_md.dataQualityInfo != null
+                    && _md.dataQualityInfo.Length > 0
                     && _md.dataQualityInfo[0] != null
                     && _md.dataQualityInfo[0].DQ_DataQuality != null
                     && _md.dataQualityInfo[0].DQ_DataQuality.lineage != null
@@ -2628,7 +2653,7 @@ namespace CswApiClient
                     };
                 }
                 else
-                { 
+                {
                     _md.dataQualityInfo[0].DQ_DataQuality.lineage = new LI_Lineage_PropertyType
                     {
                         LI_Lineage = new LI_Lineage_Type
@@ -2673,7 +2698,7 @@ namespace CswApiClient
                         statement = CreateFreeTextElement(existingLocalProcessHistory, value)
                     }
                 };
-                
+
             }
         }
 
@@ -2681,13 +2706,13 @@ namespace CswApiClient
         {
             CharacterString_PropertyType processHistory = null;
             if (_md.dataQualityInfo != null && _md.dataQualityInfo.Count() > 0
-                && _md.dataQualityInfo[0].DQ_DataQuality != null && _md.dataQualityInfo[0].DQ_DataQuality.lineage !=null
+                && _md.dataQualityInfo[0].DQ_DataQuality != null && _md.dataQualityInfo[0].DQ_DataQuality.lineage != null
                 && _md.dataQualityInfo[0].DQ_DataQuality.lineage.LI_Lineage != null && _md.dataQualityInfo[0].DQ_DataQuality.lineage.LI_Lineage.statement != null)
                 processHistory = _md.dataQualityInfo[0].DQ_DataQuality.lineage.LI_Lineage.statement;
             return processHistory;
         }
 
-        public DateTime? DateCreated 
+        public DateTime? DateCreated
         {
             get
             {
@@ -2710,7 +2735,7 @@ namespace CswApiClient
             }
         }
 
-       
+
 
         public DateTime? DatePublished
         {
@@ -2782,7 +2807,7 @@ namespace CswApiClient
         public SimpleValidTimePeriod ValidTimePeriod
         {
 
-            get 
+            get
             {
                 SimpleValidTimePeriod value = new SimpleValidTimePeriod();
                 EX_Extent_PropertyType[] extents = GetIdentificationExtents();
@@ -2813,7 +2838,7 @@ namespace CswApiClient
                                             ValidFrom = validFrom.Value,
                                             ValidTo = validTo.Value
                                         };
-                                        
+
                                         break;
                                     }
                                 }
@@ -2825,9 +2850,9 @@ namespace CswApiClient
                 return value;
             }
 
-            set 
+            set
             {
-                EX_TemporalExtent_PropertyType[]  temporalElement= new EX_TemporalExtent_PropertyType[]
+                EX_TemporalExtent_PropertyType[] temporalElement = new EX_TemporalExtent_PropertyType[]
                     {
                         new EX_TemporalExtent_PropertyType()
                         {
@@ -2841,14 +2866,14 @@ namespace CswApiClient
 
                                         Item = new TimePositionType()
                                         {
-                                            Value = value.ValidFrom 
+                                            Value = value.ValidFrom
                                         },
                                         Item1 = new TimePositionType()
                                         {
                                             Value = value.ValidTo
                                         }
                                     }
-                                } 
+                                }
                             }
                         }
                     };
@@ -2894,7 +2919,7 @@ namespace CswApiClient
                 newExtent.description = description;
                 newExtent.temporalElement = temporalElement;
                 newExtent.verticalElement = verticalElement;
-  
+
             }
         }
 
@@ -2928,7 +2953,7 @@ namespace CswApiClient
                         break;
                     }
                 }
-            }            
+            }
             return date;
         }
 
@@ -2951,7 +2976,7 @@ namespace CswApiClient
 
         private void UpdateCitationDateForType(CI_Citation_Type citation, string dateType, DateTime? incomingDateTime)
         {
-            
+
             bool updated = false;
             string updatedValue = null;
             if (incomingDateTime.HasValue)
@@ -2972,7 +2997,9 @@ namespace CswApiClient
                         updated = true;
                     }
                 }
-            } else {
+            }
+            else
+            {
                 citation.date = new CI_Date_PropertyType[0];
             }
 
@@ -2988,14 +3015,14 @@ namespace CswApiClient
                                 CI_DateTypeCode = new CodeListValue_Type {
                                     codeList = "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#CI_DateTypeCode",
                                     codeListValue = dateType
-                                }    
+                                }
                             }
                         }
                     }
                 };
                 citation.date = citation.date.Concat(newArray).ToArray();
             }
-            
+
         }
 
         public string MetadataLanguage
@@ -3065,7 +3092,7 @@ namespace CswApiClient
                 {
                     foreach (EX_Extent_PropertyType extent in extents)
                     {
-                        if (extent.EX_Extent != null 
+                        if (extent.EX_Extent != null
                             && extent.EX_Extent.geographicElement != null
                             && extent.EX_Extent.geographicElement[0] != null
                             && extent.EX_Extent.geographicElement[0].AbstractEX_GeographicExtent != null)
@@ -3090,7 +3117,7 @@ namespace CswApiClient
 
             set
             {
-                EX_GeographicExtent_PropertyType[] geographicElement = new EX_GeographicExtent_PropertyType[] 
+                EX_GeographicExtent_PropertyType[] geographicElement = new EX_GeographicExtent_PropertyType[]
                 {
                     new EX_GeographicExtent_PropertyType
                     {
@@ -3161,7 +3188,7 @@ namespace CswApiClient
                                 }
                             };
                 }
-                
+
             }
             else
             {
@@ -3230,7 +3257,7 @@ namespace CswApiClient
                                 && securityConstraint.classification.MD_ClassificationCode != null)
                             {
                                 value.SecurityConstraints = securityConstraint.classification.MD_ClassificationCode.codeListValue;
-                                if (securityConstraint.userNote != null) 
+                                if (securityConstraint.userNote != null)
                                 {
                                     value.SecurityConstraintsNote = securityConstraint.userNote.CharacterString;
                                 }
@@ -3259,7 +3286,7 @@ namespace CswApiClient
                                         {
                                             value.OtherConstraints = otherConstraint.CharacterString;
                                             var englishOtherConstraint = legalConstraint.otherConstraints[0].MD_RestrictionOther as PT_FreeText_PropertyType;
-                                            if(englishOtherConstraint != null)
+                                            if (englishOtherConstraint != null)
                                                 value.EnglishOtherConstraints = GetEnglishValueFromFreeText(englishOtherConstraint);
                                         }
 
@@ -3288,10 +3315,10 @@ namespace CswApiClient
                                         for (int a = 0; a < legalConstraint.otherConstraints.Length; a++)
                                         {
                                             var access = legalConstraint.otherConstraints[a].MD_RestrictionOther as CharacterString_PropertyType;
-                                            if(access != null)
-                                            { 
+                                            if (access != null)
+                                            {
                                                 if (access.CharacterString == "no restrictions" || access.CharacterString == "norway digital restricted")
-                                                { 
+                                                {
                                                     value.OtherConstraintsAccess = access.CharacterString;
                                                     break;
                                                 }
@@ -3341,7 +3368,7 @@ namespace CswApiClient
                 MD_RestrictionOther_PropertyType[] otherCons;
                 MD_RestrictionOther_PropertyType otherConsString = null;
                 if (!string.IsNullOrEmpty(value.EnglishOtherConstraints))
-                    otherConsString = new MD_RestrictionOther_PropertyType { MD_RestrictionOther = CreateFreeTextElement(value.OtherConstraints, value.EnglishOtherConstraints ) };
+                    otherConsString = new MD_RestrictionOther_PropertyType { MD_RestrictionOther = CreateFreeTextElement(value.OtherConstraints, value.EnglishOtherConstraints) };
                 else
                     otherConsString = new MD_RestrictionOther_PropertyType { MD_RestrictionOther = new CharacterString_PropertyType { CharacterString = value.OtherConstraints } };
 
@@ -3374,28 +3401,28 @@ namespace CswApiClient
                     new MD_Constraints_PropertyType {
                         MD_Constraints = new MD_Constraints_Type {
                             useLimitation = new CharacterString_PropertyType[] { CreateFreeTextElement(value.UseLimitations, value.EnglishUseLimitations) }
-                        }    
+                        }
                     },
                     new MD_Constraints_PropertyType {
                         MD_Constraints = new MD_LegalConstraints_Type {
-                            accessConstraints = new MD_RestrictionCode_PropertyType[] { 
+                            accessConstraints = new MD_RestrictionCode_PropertyType[] {
                                 new MD_RestrictionCode_PropertyType {
                                     MD_RestrictionCode = new CodeListValue_Type {
                                         codeList = "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_RestrictionCode",
                                         codeListValue = value.AccessConstraints
-                                    }    
+                                    }
                                 }
                             },
-                            useConstraints = new MD_RestrictionCode_PropertyType[] { 
+                            useConstraints = new MD_RestrictionCode_PropertyType[] {
                                 new MD_RestrictionCode_PropertyType {
                                     MD_RestrictionCode = new CodeListValue_Type {
                                         codeList = "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_RestrictionCode",
                                         codeListValue = value.UseConstraints
-                                    }    
+                                    }
                                 }
                             },
                             otherConstraints = otherCons
-                        }    
+                        }
                     },
                     new MD_Constraints_PropertyType {
                         MD_Constraints = new MD_SecurityConstraints_Type {
@@ -3406,9 +3433,9 @@ namespace CswApiClient
                                 MD_ClassificationCode = new CodeListValue_Type {
                                     codeList = "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_ClassificationCode",
                                     codeListValue = value.SecurityConstraints
-                                }    
+                                }
                             }
-                        }    
+                        }
                     }
                 };
 
@@ -3448,7 +3475,7 @@ namespace CswApiClient
                     List<MD_AggregateInformation_PropertyType> crossReference = new List<MD_AggregateInformation_PropertyType>();
                     foreach (string uuid in value)
                     {
-                        crossReference.Add( new MD_AggregateInformation_PropertyType
+                        crossReference.Add(new MD_AggregateInformation_PropertyType
                         {
                             MD_AggregateInformation = new MD_AggregateInformation_Type
                             {
@@ -3459,7 +3486,8 @@ namespace CswApiClient
                                         code = new CharacterString_PropertyType { CharacterString = uuid }
                                     }
                                 },
-                                associationType = new DS_AssociationTypeCode_PropertyType {
+                                associationType = new DS_AssociationTypeCode_PropertyType
+                                {
                                     DS_AssociationTypeCode = new CodeListValue_Type
                                     {
                                         codeList = "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml",
@@ -3486,7 +3514,8 @@ namespace CswApiClient
 
         public List<string> OperatesOn
         {
-            get { 
+            get
+            {
                 List<string> values = new List<string>();
                 var identification = GetServiceIdentification();
 
@@ -3500,16 +3529,19 @@ namespace CswApiClient
                 }
                 return values;
             }
-            set {
+            set
+            {
                 var identification = GetServiceIdentification();
                 if (identification != null)
                 {
                     List<MD_DataIdentification_PropertyType> operatesOn = new List<MD_DataIdentification_PropertyType>();
-                    foreach(string uuid in value) {
-                        operatesOn.Add(new MD_DataIdentification_PropertyType {
+                    foreach (string uuid in value)
+                    {
+                        operatesOn.Add(new MD_DataIdentification_PropertyType
+                        {
                             uuidref = uuid,
                             href = "https://www.CswAPIClient.no/geonetwork/srv/nor/xml_iso19139?uuid=" + uuid
-                    });
+                        });
                     }
 
                     identification.operatesOn = operatesOn.ToArray();
@@ -3691,8 +3723,8 @@ namespace CswApiClient
                 var identification = GetServiceIdentification();
                 if (identification.containsOperations != null && identification.containsOperations.Length > 0)
                 {
-                    foreach(var containOperation in identification.containsOperations)
-                    { 
+                    foreach (var containOperation in identification.containsOperations)
+                    {
                         SimpleOperation operation = new SimpleOperation();
                         var operationMetadata = containOperation.SV_OperationMetadata;
                         operation.Name = operationMetadata?.operationName?.CharacterString;
@@ -3732,7 +3764,7 @@ namespace CswApiClient
                         });
                     }
 
-                    if(operationMetadata.Count == 0)
+                    if (operationMetadata.Count == 0)
                         identification.containsOperations = new SV_OperationMetadata_PropertyType[]
                             {
                                 new SV_OperationMetadata_PropertyType()
@@ -3807,8 +3839,8 @@ namespace CswApiClient
                 string value = "other";
                 var identification = GetServiceIdentification();
 
-                if (identification != null && identification.serviceType != null 
-                    && identification.serviceType.Item !=null && identification.serviceType.Item.Value !=null)
+                if (identification != null && identification.serviceType != null
+                    && identification.serviceType.Item != null && identification.serviceType.Item.Value != null)
                 {
                     value = identification.serviceType.Item.Value;
                 }
@@ -3869,7 +3901,7 @@ namespace CswApiClient
             };
         }
 
-        public string SpecificUsage 
+        public string SpecificUsage
         {
             get
             {
@@ -3885,7 +3917,7 @@ namespace CswApiClient
             }
 
             set
-            { 
+            {
                 var identification = GetIdentification();
 
                 if (identification != null)
@@ -3979,7 +4011,7 @@ namespace CswApiClient
             var identification = GetIdentification();
             if (identification != null && identification.resourceSpecificUsage != null && identification.resourceSpecificUsage.Count() > 0
                 && identification.resourceSpecificUsage[0].MD_Usage != null && identification.resourceSpecificUsage[0].MD_Usage.specificUsage != null
-                &&  !string.IsNullOrEmpty(identification.resourceSpecificUsage[0].MD_Usage.specificUsage.CharacterString))
+                && !string.IsNullOrEmpty(identification.resourceSpecificUsage[0].MD_Usage.specificUsage.CharacterString))
                 specificUsage = identification.resourceSpecificUsage[0].MD_Usage.specificUsage;
             return specificUsage;
         }
@@ -3992,12 +4024,12 @@ namespace CswApiClient
                 var identification = GetServiceIdentification();
 
                 if (identification != null && identification.accessProperties != null && identification.accessProperties.MD_StandardOrderProcess != null
-                    && identification.accessProperties.MD_StandardOrderProcess.orderingInstructions != null 
-                    && !string.IsNullOrEmpty(identification.accessProperties.MD_StandardOrderProcess.orderingInstructions.CharacterString) )
-                    {
-                        values = new SimpleAccessProperties();
-                        values.OrderingInstructions = identification.accessProperties.MD_StandardOrderProcess.orderingInstructions.CharacterString;
-                    }   
+                    && identification.accessProperties.MD_StandardOrderProcess.orderingInstructions != null
+                    && !string.IsNullOrEmpty(identification.accessProperties.MD_StandardOrderProcess.orderingInstructions.CharacterString))
+                {
+                    values = new SimpleAccessProperties();
+                    values.OrderingInstructions = identification.accessProperties.MD_StandardOrderProcess.orderingInstructions.CharacterString;
+                }
                 return values;
             }
             set
@@ -4204,7 +4236,7 @@ namespace CswApiClient
         public string SpecificationLink { get; set; }
         public string Title { get; set; }
         public string TitleLink { get; set; }
-        public string TitleLinkDescription { get; set; }   
+        public string TitleLinkDescription { get; set; }
         public string Date { get; set; }
         public string DateType { get; set; }
         public string Explanation { get; set; }
@@ -4239,11 +4271,11 @@ namespace CswApiClient
     }
 
 
-    public class SimpleValidTimePeriod 
+    public class SimpleValidTimePeriod
     {
         public string ValidFrom { get; set; }
         public string ValidTo { get; set; }
-    
+
     }
 
     public class SimpleResourceReference
