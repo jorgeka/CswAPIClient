@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <RootNamespace>CswApiClient.Tests</RootNamespace>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Arkitektum.GIS.Lib.MetadataCSW" Version="1.9.100" />
+    <PackageReference Include="Arkitektum.GIS.Lib.SerializeUtil" Version="1.3.1" />
+    <PackageReference Include="FluentAssertions" Version="4.0.1" />
+    <PackageReference Include="Moq" Version="4.2.1510.2205" />
+    <PackageReference Include="NUnit" Version="2.6.4" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\CswApiClient\CswApiClient.csproj" />
+  </ItemGroup>
+</Project>

@@ -4,7 +4,7 @@ using Arkitektum.GIS.Lib.SerializeUtil;
 using NUnit.Framework;
 using www.opengis.net;
 
-namespace GeoNorgeAPI.Tests
+namespace CswApiClient.Tests
 {
     public class SerializeTest
     {

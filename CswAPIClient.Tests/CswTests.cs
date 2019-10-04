@@ -1,25 +1,26 @@
 ﻿using NUnit.Framework;
 using www.opengis.net;
-using GeoNorgeAPI;
+using CswApiClient;
 using System;
 using System.Collections.Generic;
-namespace GeoNorgeAPI.Tests
+
+namespace CswApiClient.Tests
 {
     
     public class CswTests
     {
-        GeoNorge _geonorge;
+        CswApi _cswApi;
 
         [SetUp]
         public void Init()
         {
-            _geonorge = new GeoNorge();
+            _cswApi = new CswApiClient.CswApi();
         }
 
         [Test]
         public void ShouldReturnRecordsWhenRunningASimpleSearch()
         {
-            var result = _geonorge.Search("wms");
+            var result = _cswApi.Search("wms");
 
             Assert.Greater(int.Parse(result.numberOfRecordsMatched), 0, "A search on 'wms' should return records.");
         }
@@ -27,7 +28,7 @@ namespace GeoNorgeAPI.Tests
         [Test]
         public void ShouldReturnSingleIsoRecord()
         {
-            MD_Metadata_Type record = _geonorge.GetRecordByUuid("63c672fa-e180-4601-a176-6bf163e0929d"); // Matrikkelen WMS
+            MD_Metadata_Type record = _cswApi.GetRecordByUuid("63c672fa-e180-4601-a176-6bf163e0929d"); // Matrikkelen WMS
             
             Assert.NotNull(record, "Record does not exist.");
         }
@@ -35,7 +36,7 @@ namespace GeoNorgeAPI.Tests
         [Test]
         public void ShouldReturnRecordsWhenSearchingWithOrganisationName()
         {
-            var result = _geonorge.SearchWithOrganisationName("%Kartverket%");
+            var result = _cswApi.SearchWithOrganisationName("%Kartverket%");
 
             Assert.Greater(int.Parse(result.numberOfRecordsMatched), 0, "An organization name search on '%Kartverket%' should return lots of records.");
         }
@@ -43,7 +44,7 @@ namespace GeoNorgeAPI.Tests
         [Test]
         public void ShouldReturnRecordsWhenSearchingWithOrganisationNameIncludingWhitespace()
         {
-            var result = _geonorge.SearchWithOrganisationName("Norsk institutt for bioøkonomi");
+            var result = _cswApi.SearchWithOrganisationName("Norsk institutt for bioøkonomi");
 
             Assert.Greater(int.Parse(result.numberOfRecordsMatched), 0, "An organization name search on 'Norsk institutt for skog og landskap' should return lots of records.");
         }
@@ -84,7 +85,7 @@ namespace GeoNorgeAPI.Tests
                     ItemsChoiceType23.And
                 };
 
-            var result = _geonorge.SearchWithFilters(filters, filterNames);
+            var result = _cswApi.SearchWithFilters(filters, filterNames);
 
             Assert.Greater(int.Parse(result.numberOfRecordsMatched), 0, "Should have return more than zero datasets from Kartverket.");
         }
@@ -93,7 +94,7 @@ namespace GeoNorgeAPI.Tests
         public void ShouldReturnRecordsSpecifiedNumberOfRecords()
         {
             int numberOfRecords = 30;
-            var result = _geonorge.Search("data", 1, numberOfRecords);
+            var result = _cswApi.Search("data", 1, numberOfRecords);
 
             Assert.Greater(int.Parse(result.numberOfRecordsMatched), 0, "A search on 'data' should return records.");
             Assert.AreEqual(numberOfRecords, int.Parse(result.numberOfRecordsReturned), "Should have returned 30 records");
@@ -102,7 +103,7 @@ namespace GeoNorgeAPI.Tests
         [Test]
         public void ShouldSearchAndReturnIsoRecords()
         {
-            var result = _geonorge.SearchIso("data");
+            var result = _cswApi.SearchIso("data");
 
             Assert.Greater(int.Parse(result.numberOfRecordsMatched), 0);
 
@@ -123,12 +124,12 @@ namespace GeoNorgeAPI.Tests
         [Test]
         public void InsertMetadata()
         {
-            _geonorge = new GeoNorge("","","https://www.geonorge.no/geonetworkbeta/");
+            _CswApiClient = new CswApiClient("","","https://www.CswApiClient.no/geonetworkbeta/");
 
             MD_Metadata_Type metadata = MetadataExample.CreateMetadataExample();
             metadata.fileIdentifier = new CharacterString_PropertyType { CharacterString = Guid.NewGuid().ToString() };
 
-            var transaction = _geonorge.MetadataInsert(metadata, new Dictionary<string, string> { {"GeonorgeUsername", "blabla"} });
+            var transaction = _CswApiClient.MetadataInsert(metadata, new Dictionary<string, string> { {"CswApiClientUsername", "blabla"} });
 
             Assert.NotNull(transaction);
             Assert.AreEqual("1", transaction.TotalInserted);
@@ -139,18 +140,18 @@ namespace GeoNorgeAPI.Tests
         [Test]
         public void UpdateMetadata()
         {
-            _geonorge = new GeoNorge("", "", "http://beta.geonorge.no/geonetwork/");
+            _CswApiClient = new CswApiClient("", "", "http://beta.CswApiClient.no/geonetwork/");
 
             MD_Metadata_Type metadata = MetadataExample.CreateMetadataExample();
 
-            _geonorge.MetadataUpdate(metadata);
+            _CswApiClient.MetadataUpdate(metadata);
         }
 
         [Test]
         public void DeleteMetadata()
         {
-            _geonorge = new GeoNorge("", "", "http://beta.geonorge.no/geonetwork/");
-            _geonorge.MetadataDelete("bcffba00-5396-4f81-ad65-d34d8771eab4");
+            _CswApiClient = new CswApiClient("", "", "http://beta.CswApiClient.no/geonetwork/");
+            _CswApiClient.MetadataDelete("bcffba00-5396-4f81-ad65-d34d8771eab4");
         }
         */
     }

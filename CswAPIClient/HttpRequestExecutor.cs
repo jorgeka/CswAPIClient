@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 
-namespace GeoNorgeAPI
+namespace CswApiClient
 {
 
 
@@ -15,18 +15,22 @@ namespace GeoNorgeAPI
         public event LogEventHandlerDebug OnLogEventDebug = delegate { };
         public event LogEventHandlerError OnLogEventError = delegate { };
 
-        private readonly RequestFactory _requestFactory;
-        private readonly RequestRunner _requestRunner;
-
         public string PostRequest(string url, string accept, string contentType, string postData, string username = null, string password = null, Cookie cookie = null, Dictionary<string, string> additionalRequestHeaders = null)
         {
+            string responseBody;
+
             HttpWebResponse response = FullPostRequest(url, accept, contentType, postData, username, password, cookie, additionalRequestHeaders);
 
-            StreamReader reader = new StreamReader(response.GetResponseStream());
-            string responseBody = reader.ReadToEnd();
+
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                responseBody = reader.ReadToEnd();
+            }
+
             response.Close();
-            //Log.Debug("HTTP response body:\n" + responseBody);
+
             OnLogEventDebug("HTTP response body:\n" + responseBody);
+
             return responseBody;
         }
 
@@ -48,7 +52,7 @@ namespace GeoNorgeAPI
 
                 if (additionalRequestHeaders != null && additionalRequestHeaders.Count > 0)
                 {
-                    foreach (KeyValuePair<string,string> element in additionalRequestHeaders)
+                    foreach (KeyValuePair<string, string> element in additionalRequestHeaders)
                     {
                         request.Headers[element.Key] = element.Value;
                     }

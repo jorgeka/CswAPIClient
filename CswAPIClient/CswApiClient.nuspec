@@ -6,14 +6,14 @@
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <licenseUrl>https://github.com/kartverket/GeoNorgeAPI</licenseUrl>
-    <projectUrl>https://github.com/kartverket/GeoNorgeAPI</projectUrl>
+    <licenseUrl>https://github.com/kartverket/CswAPIClient</licenseUrl>
+    <projectUrl>https://github.com/kartverket/CswAPIClient</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>API for communicating with the CSW-service running at www.geonorge.no</description>
+    <description>API for communicating with the CSW-service running at www.CswAPIClient.no</description>
     <releaseNotes>
       Add grid coverage map
     </releaseNotes>
     <copyright>Copyright 2015 Kartverket</copyright>
-    <tags>geonorge gis metadata api csw</tags>
+    <tags>CswAPIClient gis metadata api csw</tags>
   </metadata>
 </package>

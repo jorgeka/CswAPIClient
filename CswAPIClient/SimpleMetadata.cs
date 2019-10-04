@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using www.opengis.net;
 
-namespace GeoNorgeAPI
+namespace CswApiClient
 {
     /// <summary>
     /// Simple abstraction of the opengis metadata. Provides convenience methods for extracting information from the metadata object.
@@ -3508,7 +3508,7 @@ namespace GeoNorgeAPI
                     foreach(string uuid in value) {
                         operatesOn.Add(new MD_DataIdentification_PropertyType {
                             uuidref = uuid,
-                            href = "https://www.geonorge.no/geonetwork/srv/nor/xml_iso19139?uuid=" + uuid
+                            href = "https://www.CswAPIClient.no/geonetwork/srv/nor/xml_iso19139?uuid=" + uuid
                     });
                     }
 
@@ -4025,7 +4025,7 @@ namespace GeoNorgeAPI
             return new CharacterString_PropertyType { CharacterString = input };
         }
 
-        internal Decimal_PropertyType DecimalFromString(string input)
+        public Decimal_PropertyType DecimalFromString(string input)
         {
             CultureInfo cultureInfo = new CultureInfo("en-US");
             if (input.Contains(","))
@@ -4065,14 +4065,14 @@ namespace GeoNorgeAPI
         public const string THESAURUS_INSPIRE_PRIORITY_DATASET = "INSPIRE priority data set";
         public const string THESAURUS_INSPIRE_PRIORITY_DATASET_LINK = "http://inspire.ec.europa.eu/metadata-codelist/PriorityDataset";
         public const string THESAURUS_NATIONAL_INITIATIVE = "Nasjonal inndeling i geografiske initiativ og SDI-er";
-        public const string THESAURUS_NATIONAL_INITIATIVE_LINK = "https://register.geonorge.no/subregister/metadata-kodelister/kartverket/samarbeid-og-lover";
+        public const string THESAURUS_NATIONAL_INITIATIVE_LINK = "https://register.CswAPIClient.no/subregister/metadata-kodelister/kartverket/samarbeid-og-lover";
         public const string THESAURUS_SERVICES_TAXONOMY = "ISO - 19119 geographic services taxonomy";
         public const string THESAURUS_NATIONAL_THEME = "Nasjonal tematisk inndeling (DOK-kategori)";
-        public const string THESAURUS_NATIONAL_THEME_LINK = "https://register.geonorge.no/subregister/metadata-kodelister/kartverket/nasjonal-temainndeling";
+        public const string THESAURUS_NATIONAL_THEME_LINK = "https://register.CswAPIClient.no/subregister/metadata-kodelister/kartverket/nasjonal-temainndeling";
         public const string THESAURUS_CONCEPT = "SOSI produktspesifikasjon";
-        public const string THESAURUS_CONCEPT_LINK = "https://objektkatalog.geonorge.no/";
+        public const string THESAURUS_CONCEPT_LINK = "https://objektkatalog.CswAPIClient.no/";
         public const string THESAURUS_ADMIN_UNITS = "Administrative enheter i Norge";
-        public const string THESAURUS_ADMIN_UNITS_LINK = "https://data.geonorge.no/administrativeEnheter";
+        public const string THESAURUS_ADMIN_UNITS_LINK = "https://data.CswAPIClient.no/administrativeEnheter";
         public const string THESAURUS_SERVICE_TYPE = "ISO 19119:2016 Geographic information -- Services";
         public const string TYPE_PLACE = "place";
         public const string TYPE_THEME = "theme";

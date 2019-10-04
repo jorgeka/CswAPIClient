@@ -6,7 +6,7 @@ using System.Diagnostics;
 using Arkitektum.GIS.Lib.SerializeUtil;
 using System.IO;
 
-namespace GeoNorgeAPI.Tests
+namespace CswApiClient.Tests
 {
     [TestFixture]
     public class SimpleMetadataTest
@@ -542,12 +542,12 @@ namespace GeoNorgeAPI.Tests
                 new SimpleKeyword {
                     Keyword = "Akvakulturgrense",
                     Type = SimpleKeyword.THESAURUS_CONCEPT,
-                    KeywordLink = "http://objektkatalog.geonorge.no"
+                    KeywordLink = "http://objektkatalog.CswAPIClient.no"
                 },
                 new SimpleKeyword {
                     Keyword = "Norge",
                     Thesaurus = SimpleKeyword.THESAURUS_ADMIN_UNITS,
-                    KeywordLink = "https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"
+                    KeywordLink = "https://data.CswAPIClient.no/administrativeEnheter/nasjon/id/173163"
                 },
                 new SimpleKeyword {
                     Keyword = "Buildings",
@@ -654,7 +654,7 @@ namespace GeoNorgeAPI.Tests
                     {
                         numberOfAdminUnitKeywords = numberOfKeywords;
                         var keyword = descriptiveKeyword.MD_Keywords.keyword[0].keyword as Anchor_Type;
-                        if (keyword.Value.Equals("Norge") && keyword.href.Equals("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"))
+                        if (keyword.Value.Equals("Norge") && keyword.href.Equals("https://data.CswAPIClient.no/administrativeEnheter/nasjon/id/173163"))
                         {
                             adminUnitNorwayFound = true;
                         }
@@ -699,7 +699,7 @@ namespace GeoNorgeAPI.Tests
                 {
                     numberOfConceptKeywords = numberOfKeywords;
                     var keyword = descriptiveKeyword.MD_Keywords.keyword[0].keyword as Anchor_Type;
-                    if (keyword.Value.Equals("Akvakulturgrense") && keyword.href.Equals("http://objektkatalog.geonorge.no"))
+                    if (keyword.Value.Equals("Akvakulturgrense") && keyword.href.Equals("http://objektkatalog.CswAPIClient.no"))
                     {
                         conceptAkvakulturgrenseFound = true;
                     }
@@ -2648,7 +2648,7 @@ namespace GeoNorgeAPI.Tests
         public void ShouldAddThumbnailToMetadataWithNoExistingThumbnails()
         {
             SimpleMetadata metadata = SimpleMetadata.CreateService();
-            metadata.Thumbnails = new List<SimpleThumbnail> { new SimpleThumbnail { Type = "thumbnail", URL = "http://www.geonorge.no/image.png" } };
+            metadata.Thumbnails = new List<SimpleThumbnail> { new SimpleThumbnail { Type = "thumbnail", URL = "http://www.CswAPIClient.no/image.png" } };
 
             Assert.AreEqual(1, metadata.Thumbnails.Count);
         }
@@ -3186,8 +3186,8 @@ namespace GeoNorgeAPI.Tests
         [Test]
         public void ShouldUpdateCoverageUrls()
         {
-            string expectedCovarageGridMapURL = "TYPE:GEONORGE-WMS@PATH:https://wms.geonorge.no/skwms/wms.geonorge_dekningskart?@LAYER:dsb_brannstasjon";
-            string expectedCovarageMapURL = "TYPE:GEONORGE-WMS@PATH:https://wms.geonorge.no/wms?@LAYER:dsb_brannstasjon";
+            string expectedCovarageGridMapURL = "TYPE:CswAPIClient-WMS@PATH:https://wms.CswAPIClient.no/skwms/wms.CswAPIClient_dekningskart?@LAYER:dsb_brannstasjon";
+            string expectedCovarageMapURL = "TYPE:CswAPIClient-WMS@PATH:https://wms.CswAPIClient.no/wms?@LAYER:dsb_brannstasjon";
             SimpleMetadata simpleMetadata = SimpleMetadata.CreateDataset();
             simpleMetadata.CoverageGridUrl = expectedCovarageGridMapURL;
             simpleMetadata.CoverageUrl = expectedCovarageMapURL;
@@ -3443,7 +3443,7 @@ namespace GeoNorgeAPI.Tests
                                 operationName = new CharacterString_PropertyType { CharacterString = "Operation1" },
                                 operationDescription = new CharacterString_PropertyType{ CharacterString = "Description1" },
                                 DCP = new DCPList_PropertyType[]{ new DCPList_PropertyType { DCPList = new CodeListValue_Type { codeListValue = "Platform1" } } },
-                                connectPoint = new CI_OnlineResource_PropertyType[]{ new CI_OnlineResource_PropertyType { CI_OnlineResource = new CI_OnlineResource_Type { linkage = new URL_PropertyType { URL = "http://service1.geonorge.no" } } } }
+                                connectPoint = new CI_OnlineResource_PropertyType[]{ new CI_OnlineResource_PropertyType { CI_OnlineResource = new CI_OnlineResource_Type { linkage = new URL_PropertyType { URL = "http://service1.CswAPIClient.no" } } } }
                             } } }
                         }
                     }
@@ -3457,7 +3457,7 @@ namespace GeoNorgeAPI.Tests
             Assert.AreEqual("Operation1", operations[0].Name);
             Assert.AreEqual("Description1", operations[0].Description);
             Assert.AreEqual("Platform1", operations[0].Platform);
-            Assert.AreEqual("http://service1.geonorge.no", operations[0].URL);
+            Assert.AreEqual("http://service1.CswAPIClient.no", operations[0].URL);
         }
         [Test]
         public void ShouldUpdateSimpleOperationsForService()

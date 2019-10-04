@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using www.opengis.net;
 
-namespace GeoNorgeAPI
+namespace CswApiClient
 {
     /// <summary>
-    /// API for communicating with the CSW services available on www.geonorge.no. 
+    /// API for communicating with the CSW services available on www.CswAPIClient.no. 
     /// </summary>
     /// 
 
@@ -13,7 +14,7 @@ namespace GeoNorgeAPI
     public delegate void LogEventHandlerDebug(string msg);
     public delegate void LogEventHandlerError(string msg, Exception ex);
 
-    public class GeoNorge : IGeoNorge
+    public class CswApi : ICswApi
     {
 
         private readonly RequestFactory _requestFactory;
@@ -23,27 +24,27 @@ namespace GeoNorgeAPI
         public event LogEventHandlerDebug OnLogEventDebug = delegate { };
         public event LogEventHandlerError OnLogEventError = delegate { };
 
-        private GeoNorge(RequestFactory requestFactory, RequestRunner requestRunner)
+        private CswApi(RequestFactory requestFactory, RequestRunner requestRunner)
         {
             _requestFactory = requestFactory;
             _requestRunner = requestRunner;
 
-            _requestRunner.OnLogEventInfo += new GeoNorgeAPI.LogEventHandlerInfo(LogEventsInfo);
-            _requestRunner.OnLogEventDebug += new GeoNorgeAPI.LogEventHandlerDebug(LogEventsDebug);
-            _requestRunner.OnLogEventError += new GeoNorgeAPI.LogEventHandlerError(LogEventsError);
+            _requestRunner.OnLogEventInfo += new LogEventHandlerInfo(LogEventsInfo);
+            _requestRunner.OnLogEventDebug += new LogEventHandlerDebug(LogEventsDebug);
+            _requestRunner.OnLogEventError += new LogEventHandlerError(LogEventsError);
         }
 
 
-        public GeoNorge(string geonetworkUsername = null, string geonetworkPassword = null)
+        public CswApi(string geonetworkUsername = null, string geonetworkPassword = null)
             : this(new RequestFactory(), new RequestRunner(geonetworkUsername, geonetworkPassword))
         {
-            
+
         }
 
-        public GeoNorge(string geonetworkUsername, string geonetworkPassword, string geonetworkEndpoint)
+        public CswApi(string geonetworkUsername, string geonetworkPassword, string geonetworkEndpoint)
             : this(new RequestFactory(), new RequestRunner(geonetworkUsername, geonetworkPassword, geonetworkEndpoint))
         {
-       
+
         }
 
         /// <summary>
@@ -85,7 +86,7 @@ namespace GeoNorgeAPI
             GetRecordByIdType request = _requestFactory.GetRecordById(uuid);
             return _requestRunner.GetRecordById(request);
         }
-        
+
         /// <summary>
         /// Search and retrieve records by organisation name. 
         /// Results returned in Dublin Core format (www.opengis.net.RecordType objects).
@@ -164,18 +165,18 @@ namespace GeoNorgeAPI
 
 
         /// <summary>
-        /// Insert metadata record in GeoNorge.
+        /// Insert metadata record in CswAPIClient.
         /// </summary>
         /// <param name="metadata"></param>
         /// <returns></returns>
-        public MetadataTransaction MetadataInsert(MD_Metadata_Type metadata, Dictionary<string,string> additionalRequestHeaders = null)
+        public MetadataTransaction MetadataInsert(MD_Metadata_Type metadata, Dictionary<string, string> additionalRequestHeaders = null)
         {
             TransactionType request = _requestFactory.MetadataInsert(metadata);
             return _requestRunner.RunCswTransaction(request, additionalRequestHeaders);
         }
 
         /// <summary>
-        /// Update metadata record in GeoNorge.
+        /// Update metadata record in CswAPIClient.
         /// </summary>
         /// <param name="metadata"></param>
         /// <returns></returns>
@@ -186,7 +187,7 @@ namespace GeoNorgeAPI
         }
 
         /// <summary>
-        /// Delete metadata record in GeoNorge.
+        /// Delete metadata record in CswAPIClient.
         /// </summary>
         /// <param name="uuid">identifier of the record to delete</param>
         /// <returns></returns>
@@ -214,6 +215,6 @@ namespace GeoNorgeAPI
                 OnLogEventError(log, ex);
         }
 
-        
+
     }
 }

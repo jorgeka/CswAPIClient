@@ -1,26 +1,26 @@
-GeoNorgeAPI
+CswAPIClient
 ===========
 
-C# API for communicating with GeoNorge.no through the CSW Service
+C# API for communicating with CswAPIClient.no through the CSW Service
 
 
 Getting Started
 ===============
 
-To install GeoNorgeAPI, run the following command in the Package Manager Console:
+To install CswAPIClient, run the following command in the Package Manager Console:
 
-    PM> Install-Package GeoNorgeAPI
+    PM> Install-Package CswAPIClient
     
 
 Example code
 ============
     
     using www.opengis.net;
-    using GeoNorgeAPI;
+    using CswAPIClient;
     
     public class MyClass {
         public void MyMethod() {
-            GeoNorge api = new GeoNorge();
+            CswAPIClient api = new CswAPIClient();
             SearchResultsType result = api.Search("flomsone");
             Console.WriteLine(result.numberOfRecordsMatched + " metadata found");
         }
@@ -32,13 +32,13 @@ Security
 
 From version: 2.1.1 (07.04.2014)
 
-The API is using SSL to communicate with www.geonorge.no. Use your credentials like this to perform Insert/update/delete operations: 
+The API is using SSL to communicate with www.CswAPIClient.no. Use your credentials like this to perform Insert/update/delete operations: 
 
-    GeoNorgeAPI.GeoNorge api = new GeoNorgeAPI.GeoNorge("myusername", "mypassword");
+    CswAPIClient.CswAPIClient api = new CswAPIClient.CswAPIClient("myusername", "mypassword");
     
     MD_Metadata_Type metadata = new MD_Metadata_Type();
     // ... add information to the metadata object
-    var transaction = _geonorge.MetadataInsert(metadata);
+    var transaction = _CswAPIClient.MetadataInsert(metadata);
     Console.WriteLine(transaction.TotalInserted + " metadata inserted.");
 
 
@@ -52,9 +52,9 @@ The **MD_Metadata_Type** is quite large and complex since it is based on the ISO
 
 Example of use of **SimpleMetadata**
 
-    using GeoNorgeAPI;
+    using CswAPIClient;
     
-    GeoNorge api = new GeoNorge("myusername", "mypassword");
+    CswAPIClient api = new CswAPIClient("myusername", "mypassword");
     
 	SimpleMetadata simpleMetadata = SimpleMetadata.CreateDataset();
 	simpleMetadata.Title = "This is my dataset!";
@@ -113,9 +113,9 @@ Example of use of **SimpleMetadata**
     </gmd:MD_Metadata>
 
 
-The **MD_Metadata_Type** can be inserted into GeoNorge by using the API like this:
+The **MD_Metadata_Type** can be inserted into CswAPIClient by using the API like this:
 
-    var transaction = _geonorge.MetadataInsert(simpleMetadata.GetMetadata());
+    var transaction = _CswAPIClient.MetadataInsert(simpleMetadata.GetMetadata());
     
 
 The **SimpleMetadata** wrapper has methods for all fields that is required to be compliant with [INSPIRE](http://inspire.ec.europa.eu/).

@@ -106,7 +106,7 @@ Utgangspunktet for kartløsningen er et grunnkart. I tillegg til dette kan det v
           <gmd:graphicOverview xmlns:srv="http://www.isotc211.org/2005/srv">
             <gmd:MD_BrowseGraphic>
               <gmd:fileName>
-                <gco:CharacterString>http://www.geonorge.no:80/geonetwork/srv/eng/resources.get?uuid=9ff8e258-2120-4e8c-94c3-0556d3762db3&amp;fname=Haram-Sandy_800x600_s.png</gco:CharacterString>
+                <gco:CharacterString>http://www.CswAPIClient.no:80/geonetwork/srv/eng/resources.get?uuid=9ff8e258-2120-4e8c-94c3-0556d3762db3&amp;fname=Haram-Sandy_800x600_s.png</gco:CharacterString>
               </gmd:fileName>
               <gmd:fileDescription>
                 <gco:CharacterString>thumbnail</gco:CharacterString>
@@ -119,7 +119,7 @@ Utgangspunktet for kartløsningen er et grunnkart. I tillegg til dette kan det v
           <gmd:graphicOverview xmlns:srv="http://www.isotc211.org/2005/srv">
             <gmd:MD_BrowseGraphic>
               <gmd:fileName>
-                <gco:CharacterString>http://www.geonorge.no:80/geonetwork/srv/eng/resources.get?uuid=9ff8e258-2120-4e8c-94c3-0556d3762db3&amp;fname=Haram-Sandy_800x600.PNG</gco:CharacterString>
+                <gco:CharacterString>http://www.CswAPIClient.no:80/geonetwork/srv/eng/resources.get?uuid=9ff8e258-2120-4e8c-94c3-0556d3762db3&amp;fname=Haram-Sandy_800x600.PNG</gco:CharacterString>
               </gmd:fileName>
               <gmd:fileDescription>
                 <gco:CharacterString>large_thumbnail</gco:CharacterString>
@@ -756,7 +756,7 @@ ADM_LOKALISERING: Sted hvor hovedkontoret for det interkommunale brannvesenet er
               <gmd:onLine>
                 <gmd:CI_OnlineResource>
                   <gmd:linkage>
-                    <gmd:URL>https://download.geonorge.no/skdl2</gmd:URL>
+                    <gmd:URL>https://download.CswAPIClient.no/skdl2</gmd:URL>
                   </gmd:linkage>
                   <gmd:protocol>
                     <gco:CharacterString xmlns:gco="http://www.isotc211.org/2005/gco">WWW:DOWNLOAD-1.0-http--download</gco:CharacterString>

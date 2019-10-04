@@ -4,7 +4,7 @@ using www.opengis.net;
 using System.Xml.Linq;
 using System.Collections.Generic;
 
-namespace GeoNorgeAPI
+namespace CswApiClient
 {
     public class RequestRunner
     {
@@ -13,11 +13,8 @@ namespace GeoNorgeAPI
         public event LogEventHandlerDebug OnLogEventDebug = delegate { };
         public event LogEventHandlerError OnLogEventError = delegate { };
 
-        private readonly RequestFactory _requestFactory;
-        private readonly RequestRunner _requestRunner;
-  
         private const string ContentTypeXml = "application/xml";
-        private const string DefaultGeonetworkEndpoint = "https://www.geonorge.no/geonetwork/";
+        private const string DefaultGeonetworkEndpoint = "https://www.CswAPIClient.no/geonetwork/";
         
         private readonly string _geonetworkEndpoint;
         private readonly string _geonetworkUsername;
@@ -32,9 +29,9 @@ namespace GeoNorgeAPI
             _geonetworkEndpoint = geonetworkEndpoint;
             _httpRequestExecutor = httpRequestExecutor;
 
-            _httpRequestExecutor.OnLogEventInfo += new GeoNorgeAPI.LogEventHandlerInfo(LogEventsInfo);
-            _httpRequestExecutor.OnLogEventDebug += new GeoNorgeAPI.LogEventHandlerDebug(LogEventsDebug);
-            _httpRequestExecutor.OnLogEventError += new GeoNorgeAPI.LogEventHandlerError(LogEventsError);
+            _httpRequestExecutor.OnLogEventInfo += new LogEventHandlerInfo(LogEventsInfo);
+            _httpRequestExecutor.OnLogEventDebug += new LogEventHandlerDebug(LogEventsDebug);
+            _httpRequestExecutor.OnLogEventError += new LogEventHandlerError(LogEventsError);
         }
 
 
@@ -107,7 +104,7 @@ namespace GeoNorgeAPI
             return ParseCswTransactionResponse(transactionResponse);      
         }
 
-        internal static MetadataTransaction ParseCswTransactionResponse(string transactionResponse)
+        public static MetadataTransaction ParseCswTransactionResponse(string transactionResponse)
         {
 
             XDocument doc = XDocument.Parse(transactionResponse);

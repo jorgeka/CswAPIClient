@@ -1,7 +1,7 @@
 ﻿using System.Xml;
 using www.opengis.net;
 
-namespace GeoNorgeAPI
+namespace CswApiClient
 {
     public class RequestFactory
     {

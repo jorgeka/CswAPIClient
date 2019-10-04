@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using www.opengis.net;
 
-namespace GeoNorgeAPI
+namespace CswApiClient
 {
-    public interface IGeoNorge
+    public interface ICswApi
     {
         /// <summary>
         /// Free text search for records.
@@ -68,21 +68,21 @@ namespace GeoNorgeAPI
         SearchResultsType SearchWithFilters(object[] filters, ItemsChoiceType23[] filterNames, int startPosition = 1, int limit = 20, bool sortByTitle = false);
 
         /// <summary>
-        /// Insert metadata record in GeoNorge.
+        /// Insert metadata record in CswAPIClient.
         /// </summary>
         /// <param name="metadata"></param>
         /// <returns></returns>
         MetadataTransaction MetadataInsert(MD_Metadata_Type metadata, Dictionary<string,string> additionalRequestHeaders = null);
 
         /// <summary>
-        /// Update metadata record in GeoNorge.
+        /// Update metadata record in CswAPIClient.
         /// </summary>
         /// <param name="metadata"></param>
         /// <returns></returns>
         MetadataTransaction MetadataUpdate(MD_Metadata_Type metadata, Dictionary<string, string> additionalRequestHeaders = null);
 
         /// <summary>
-        /// Delete metadata record in GeoNorge.
+        /// Delete metadata record in CswAPIClient.
         /// </summary>
         /// <param name="uuid">identifier of the record to delete</param>
         /// <returns></returns>
